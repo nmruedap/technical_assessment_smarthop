@@ -1,1 +1,1 @@
-# technical_assessment_smarthop
+Smarthop machine learning position (technical assessment)
