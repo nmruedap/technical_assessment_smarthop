@@ -15,3 +15,19 @@ Python file `lunar_lander_dqn.py` check if previous training model exists (`l_la
 
 <!-- QUESTION 3 -->
 ## Customize environment
+
+Environment lunar lander was customized in python file `lunar_launcher_env.py`. Lunar launcher environment goal is reach the top center of screen environment (between flags). It make random terrains, simulating random launch started angles. If `set_random_x_pos=False` always will start in ground center (see image below).
+
+![set_random_x_pos = False random angles in center screen](images/set_random_x_pos_false.jpg)
+
+If `set_random_x_pos=True` agent will start in random ground positions along x axis (see image below).
+
+![set_random_x_pos = True Random angles and random ground positions along x axis](images/set_random_x_pos_true.jpg)
+
+To allow the performance of an agent in this environment, it was necessary to make some changes, which are described below:
+
+- Friction was increased to allow a fixed started position
+- Collision ground detector was removed, when agent reach to top, game over
+- Main engine power was decreased to promote use of right and left engines, it force agent to fly to reach correct launch angle and position
+- Observation space was reduced to 6, observations related with contact ground detection were removed
+- Rewards system was changed, to promote movement and reach the center top
