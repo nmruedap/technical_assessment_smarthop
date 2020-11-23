@@ -32,6 +32,8 @@ To allow the performance of an agent in this environment, it was necessary to ma
 - Observation space was reduced to 6, observations related with contact ground detection were removed
 - Rewards system was changed, to promote movement and reach the center top
 
-Environment lunar launcher was tested in python file `using_custom_env_lunarlauncher.py` through DQN algorithm. 
+Environment lunar launcher was tested in python file `using_custom_env_lunarlauncher.py` through DQN algorithm. Below is a gif with recording result:
+
+![Lunar launcher with DQN training agent recorded video](images/lunar_launcher_trained_agent.gif)
 
 Folder `gym-lunarlauncher` was added to install environment using `pip3 install -e gym-lunarlauncher`, however, I haven't tested yet because I using anaconda virtual python, but I hope it works.
