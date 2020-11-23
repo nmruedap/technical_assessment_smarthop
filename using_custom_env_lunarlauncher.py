@@ -3,20 +3,21 @@ import gym
 from stable_baselines import DQN
 from stable_baselines.common.vec_env import VecVideoRecorder, DummyVecEnv
 import os.path
+import lunarlauncher_env
 from os import path
 
 #env_id = 'LunarLander-v2'
 #video_folder = 'videos/'
-env = gym.make('LunarLander-v2')
+env = lunarlauncher_env.LunarLauncherEnv(False)
 
-if path.isfile("l_lander_dqn.zip"):
+if path.isfile("l_launcher_dqn.zip"):
     #env = DummyVecEnv([lambda: gym.make(env_id)])
     #env = VecVideoRecorder(env, video_folder,
     #                       record_video_trigger=lambda x: x == 0, video_length=1000,
     #                       name_prefix="lunar_lander_testing_agent")
 
     # Evaluation stage
-    model = DQN.load("l_lander_dqn")
+    model = DQN.load("l_launcher_dqn")
     obs = env.reset()
 
     for i in range(1000):
@@ -31,11 +32,12 @@ else:
 
     # Train the agent
     model.learn(total_timesteps=int(5e5))
-    model.save("l_lander_dqn")
+    #model.learn(total_timesteps=int(1000))
+    model.save("l_launcher_dqn")
     del model
 
     # Load the trained agent
-    model = DQN.load("l_lander_dqn")
+    model = DQN.load("l_launcher_dqn")
 
     # Evaluation environment
     obs = env.reset()
