@@ -1,21 +1,12 @@
 import gym
 
 from stable_baselines import DQN
-from stable_baselines.common.vec_env import VecVideoRecorder, DummyVecEnv
-import os.path
 import lunarlauncher_env
 from os import path
 
-#env_id = 'LunarLander-v2'
-#video_folder = 'videos/'
 env = lunarlauncher_env.LunarLauncherEnv(False)
 
 if path.isfile("l_launcher_dqn.zip"):
-    #env = DummyVecEnv([lambda: gym.make(env_id)])
-    #env = VecVideoRecorder(env, video_folder,
-    #                       record_video_trigger=lambda x: x == 0, video_length=1000,
-    #                       name_prefix="lunar_lander_testing_agent")
-
     # Evaluation stage
     model = DQN.load("l_launcher_dqn")
     obs = env.reset()
@@ -24,14 +15,12 @@ if path.isfile("l_launcher_dqn.zip"):
         action, _states = model.predict(obs)
         obs, rewards, dones, info = env.step(action)
         env.render()
-
-    #env.close()
 else:
     # Learning stage
     model = DQN('MlpPolicy', env, learning_rate=1e-3, prioritized_replay=True, verbose=1)
 
     # Train the agent
-    model.learn(total_timesteps=int(5e5))
+    model.learn(total_timesteps=int(1e5))
     model.save("l_launcher_dqn")
     del model
 
@@ -44,3 +33,15 @@ else:
         action, _states = model.predict(obs)
         obs, rewards, dones, info = env.step(action)
         env.render()
+
+'''
+env = lunarlauncher_env.LunarLauncherEnv(False)
+obs = env.reset()
+for i in range(100):
+    obs, rewards, dones, info = env.step(2)
+    #if (i % 2) == 0:
+    #    obs, rewards, dones, info = env.step(3)
+    #else:
+    #    obs, rewards, dones, info = env.step(2)
+    env.render()
+'''

@@ -10,8 +10,8 @@ from Box2D.b2 import (edgeShape, circleShape, fixtureDef, polygonShape, revolute
 FPS = 50
 SCALE = 30.0   # affects how fast-paced the game is, forces should be adjusted as well
 
-MAIN_ENGINE_POWER = 10.0
-SIDE_ENGINE_POWER = 0.5
+MAIN_ENGINE_POWER = 13.0
+SIDE_ENGINE_POWER = 0.6
 
 INITIAL_RANDOM = 1000.0   # Set 1500 to make game harder
 
@@ -29,6 +29,7 @@ SIDE_ENGINE_AWAY = 12.0
 
 VIEWPORT_W = 600
 VIEWPORT_H = 400
+
 
 class LunarLauncherEnv(gym.Env, EzPickle):
     metadata = {
@@ -50,7 +51,6 @@ class LunarLauncherEnv(gym.Env, EzPickle):
         self.launcher = None
         self.particles = []
         self.start_pos = [0, 0]
-
         self.prev_reward = None
 
         # useful range is -1 .. +1, but spikes can be higher
@@ -242,9 +242,10 @@ class LunarLauncherEnv(gym.Env, EzPickle):
 
         pos = self.launcher.position
         vel = self.launcher.linearVelocity
+
         state = [
             (pos.x - VIEWPORT_W / SCALE / 2) / (VIEWPORT_W / SCALE / 2),
-            (pos.y - (self.helipad_y / SCALE)) / (VIEWPORT_H / SCALE / 2),
+            (pos.y - (VIEWPORT_H/SCALE)) / (VIEWPORT_H / SCALE / 2),
             vel.x * (VIEWPORT_W / SCALE / 2) / FPS,
             vel.y * (VIEWPORT_H / SCALE / 2) / FPS,
             self.launcher.angle,
@@ -255,19 +256,23 @@ class LunarLauncherEnv(gym.Env, EzPickle):
         reward = 0
         shaping = \
             - 100 * np.sqrt(state[0] * state[0] + state[1] * state[1]) \
-            - 100 * np.sqrt(state[2] * state[2] + state[3] * state[3]) \
             - 100 * abs(state[4]) + 10
+
         if self.prev_shaping is not None:
             reward = shaping - self.prev_shaping
         self.prev_shaping = shaping
 
-        reward -= m_power * 0.30  # less fuel spent is better, about -30 for heuristic landing
+
+        reward -= m_power * 0.10
         reward -= s_power * 0.03
 
+        done = False
         if pos.y >= (VIEWPORT_W / SCALE):
             self.game_over = True
+        if not self.launcher.awake:
+            done = True
+            reward = +100
 
-        done = False
         if self.game_over or abs(state[0]) >= 1.0:
             done = True
             reward = +100
