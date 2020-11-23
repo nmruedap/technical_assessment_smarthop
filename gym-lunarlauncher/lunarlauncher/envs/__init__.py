@@ -1,0 +1,2 @@
+from gym_lunarlauncher.envs.foo_env import LunarlauncherEnv
+from gym_lunarlauncher.envs.foo_extrahard_env import LunarlauncherExtraHardEnv

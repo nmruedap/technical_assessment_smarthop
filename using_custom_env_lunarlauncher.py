@@ -32,7 +32,6 @@ else:
 
     # Train the agent
     model.learn(total_timesteps=int(5e5))
-    #model.learn(total_timesteps=int(1000))
     model.save("l_launcher_dqn")
     del model
 
